@@ -6,13 +6,18 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
+
+from sklearn.naive_bayes import GaussianNB
+
 from sklearn.feature_extraction.text import TfidfTransformer
 
 filename = 'Trou aux Biches Beachcomber Golf Resort & Spa.csv'
+filename1 = 'Clean_1.csv'
+
 
 #names =['CT','CS','C','D','M','R']
 
-hotel = pd.read_csv(filename)
+hotel = pd.read_csv(filename1)
 
 print(hotel.head())
 
@@ -34,7 +39,7 @@ for x in hotel:
     print(x)
 # Starting the process
 
-X_train, X_test, y_train, y_test = train_test_split(hotel, hotel.Rating, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(hotel, hotel.Rating, test_size=0.5, shuffle=False)
 
 
 print(hotel.shape)
@@ -43,7 +48,7 @@ print(y_train.shape)
 
 
 count = CountVectorizer()
-temp = count.fit_transform(X_train['Comments'].values.astype('str')) # word count for recurrent words
+temp = count.fit_transform(X_train['Comments'].values.astype('str'))  # word count for recurrent words
 
 
 #print("temp: " + temp)
@@ -65,4 +70,4 @@ print(np.mean(predicted == y_test))
 
 
 print("\n\n\n Printing for custom sentence: ")
-print(model.predict(tdif.transform(count.transform(["Worst Hotel"]))))
+print(model.predict(tdif.transform(count.transform(["not outstanding but quite nice with tasty food and good bed"]))))
