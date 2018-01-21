@@ -21,10 +21,15 @@ from sklearn.metrics import accuracy_score
 filename = 'Trou aux Biches Beachcomber Golf Resort & Spa.csv'
 filename1 = 'Clean_1.csv'
 
+train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\correct_equal_combined.csv'
+test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\test_correct_300_each.csv'
 
 #names =['CT','CS','C','D','M','R']
 
-hotel = pd.read_csv(filename1)
+# hotel = pd.read_csv(filename1)
+
+hotel = pd.read_csv(train_dataset, encoding='latin-1')
+hotel_test = pd.read_csv(test_dataset, encoding='latin-1')
 
 print("head(): \n")
 print(hotel.head())
@@ -62,45 +67,58 @@ print("2. Performing Imputation: \n")
 print("hotel_dup summary for all attributes(): \n")
 print(hotel_dup.describe(include='all'))
 
-vectorizer = CountVectorizer(stop_words='english')
-X_train_counts = vectorizer.fit_transform(hotel['Comments'].values.astype('str'))
+X_train = hotel
+y_train = hotel.Rating
 
-print(X_train_counts)
-
-
-
-tfidf_transformer = TfidfTransformer()
-X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
-
-print(X_train_tfidf)
+X_test = hotel_test
+y_test = hotel_test.Rating
 
 print(hotel.shape)
-print(X_train_counts.shape)
-print(X_train_tfidf.shape)
+print(X_train.shape)
+print(y_train.shape)
 
-nb = GaussianNB()
+
+count = CountVectorizer(stop_words='english', tokenizer=None, ngram_range=(1, 2))
+temp = count.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
+
+print(count.get_feature_names())
+
+#print("temp: " + temp)
+
+tdif = TfidfTransformer(norm='l2')
+temp2 = tdif.fit_transform(temp) # Give words different Weights
+
+# nb = GaussianNB()
 mn = MultinomialNB()
-from scipy.sparse import csr_matrix
 
-X = X_train_tfidf.todense()
-nb.fit(X, hotel['Rating'])
+# Must convert to dense matrix for GaussianNB
+# X = temp2.todense()
+# nb.fit(X, hotel['Rating'])
 
-mn.fit(X_train_tfidf, hotel['Rating'])
+mn.fit(temp2, hotel['Rating'])
 
 
-print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
-print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
+prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype('str')))
 
-print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["We went to Mauritius and Dubai to celebrate our 10th Wedding Anniversary and stayed at Port Chambly when we were in Mauritius. We had done a swap through Interval International and had been allocated a 1 bedroom appartment| but when we checked in we were given a 3 bedroom which was nice| and we were able to check in 4 1/2 hours which was excellent. The apartment was excellently laid out and furnished and the main bed was very big and comfy. There was free WiFi in the bar area| and we were presented with a complimentary cocktail on arrival| which was a nice touch.That was the really very good bits. On the negative side the resort is extremely isolated and quite dificult to find from the main motorway from the airport for the first time. We like to be able to walk to local restaurants from where we are staying and this was absolutely impossible here. You needed a car to get anywhere though there was a bus stop outside the main entrance we didn't try public transport. The onsite restaurant and bar was very expensive compared to the restaurants we travelled out to| and the staff were not veery knowledgeable on tours available to be booked. There was only 1 English channel on the satellite receiver and that was BBC World News.With a car we found the resort well situated to tour the island once we'd worked out the back roads and short cuts| and didn'tr find too many problems getting into Port Louis by road| despite some previous comments on Trip Advisor| though it was busy during the rush hour but this would apply to any hotel / resort in the Port Louis area unless you were staying at Caudan Waterfront.If you do come to Port Chambly and want to stock up the kitchen we'd recommend going a few miles to the South African supermarkets (Pick'n'Pay| Intermart & Food Lovers Paradise) at Grand Baie rather than the nearby Jumbo supermarket."])).todense()))
-print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["We went to Mauritius and Dubai to celebrate our 10th Wedding Anniversary and stayed at Port Chambly when we were in Mauritius. We had done a swap through Interval International and had been allocated a 1 bedroom appartment| but when we checked in we were given a 3 bedroom which was nice| and we were able to check in 4 1/2 hours which was excellent. The apartment was excellently laid out and furnished and the main bed was very big and comfy. There was free WiFi in the bar area| and we were presented with a complimentary cocktail on arrival| which was a nice touch.That was the really very good bits. On the negative side the resort is extremely isolated and quite dificult to find from the main motorway from the airport for the first time. We like to be able to walk to local restaurants from where we are staying and this was absolutely impossible here. You needed a car to get anywhere though there was a bus stop outside the main entrance we didn't try public transport. The onsite restaurant and bar was very expensive compared to the restaurants we travelled out to| and the staff were not veery knowledgeable on tours available to be booked. There was only 1 English channel on the satellite receiver and that was BBC World News.With a car we found the resort well situated to tour the island once we'd worked out the back roads and short cuts| and didn'tr find too many problems getting into Port Louis by road| despite some previous comments on Trip Advisor| though it was busy during the rush hour but this would apply to any hotel / resort in the Port Louis area unless you were staying at Caudan Waterfront.If you do come to Port Chambly and want to stock up the kitchen we'd recommend going a few miles to the South African supermarkets (Pick'n'Pay| Intermart & Food Lovers Paradise) at Grand Baie rather than the nearby Jumbo supermarket."])).todense()))
+predicted = mn.predict(prediction_data)
 
-print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Excellet place to stay withc decent rooms view and facilities.The rooms are neat and evrything just gr8.the only prob was the breakfast.. Not to great and very limited stuff. There are number of activities which one can enjoy boat ride| kayak| canoying etc.. the place is just beautiful.Not a beach hotel| but good location both for busniess and leisure.Its value for money."])).todense()))
-print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Excellet place to stay withc decent rooms view and facilities.The rooms are neat and evrything just gr8.the only prob was the breakfast.. Not to great and very limited stuff. There are number of activities which one can enjoy boat ride| kayak| canoying etc.. the place is just beautiful.Not a beach hotel| but good location both for busniess and leisure.Its value for money."])).todense()))
+# for c, d in zip(predicted, y_test):
+#     print(c, d)
+print(np.mean(predicted == y_test))
 
-print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Amazing location with a high sense of safety in the place. Nice view from the villa and very quiet place with nice live band music. We went down till the mouth of the river and it was very calm and peaceful. "])).todense()))
-print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Amazing location with a high sense of safety in the place. Nice view from the villa and very quiet place with nice live band music. We went down till the mouth of the river and it was very calm and peaceful. "])).todense()))
-
-print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["run down| terrible customer service| cockroaches in restaurant| not enough cups| glasses etc at meal times| have stayed at 3* hotels which have been better then this. breakfast ample| other meal times poor. All inclusive absolute joke| cocktail was slush puppy machine 1 was non alcoholic & the other with alcohol| can honestly say 1 of the worst hotels have ever stayed in"])).todense()))
-print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["run down| terrible customer service| cockroaches in restaurant| not enough cups| glasses etc at meal times| have stayed at 3* hotels which have been better then this. breakfast ample| other meal times poor. All inclusive absolute joke| cocktail was slush puppy machine 1 was non alcoholic & the other with alcohol| can honestly say 1 of the worst hotels have ever stayed in"])).todense()))
+# print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
+# print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
+#
+# print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["We went to Mauritius and Dubai to celebrate our 10th Wedding Anniversary and stayed at Port Chambly when we were in Mauritius. We had done a swap through Interval International and had been allocated a 1 bedroom appartment| but when we checked in we were given a 3 bedroom which was nice| and we were able to check in 4 1/2 hours which was excellent. The apartment was excellently laid out and furnished and the main bed was very big and comfy. There was free WiFi in the bar area| and we were presented with a complimentary cocktail on arrival| which was a nice touch.That was the really very good bits. On the negative side the resort is extremely isolated and quite dificult to find from the main motorway from the airport for the first time. We like to be able to walk to local restaurants from where we are staying and this was absolutely impossible here. You needed a car to get anywhere though there was a bus stop outside the main entrance we didn't try public transport. The onsite restaurant and bar was very expensive compared to the restaurants we travelled out to| and the staff were not veery knowledgeable on tours available to be booked. There was only 1 English channel on the satellite receiver and that was BBC World News.With a car we found the resort well situated to tour the island once we'd worked out the back roads and short cuts| and didn'tr find too many problems getting into Port Louis by road| despite some previous comments on Trip Advisor| though it was busy during the rush hour but this would apply to any hotel / resort in the Port Louis area unless you were staying at Caudan Waterfront.If you do come to Port Chambly and want to stock up the kitchen we'd recommend going a few miles to the South African supermarkets (Pick'n'Pay| Intermart & Food Lovers Paradise) at Grand Baie rather than the nearby Jumbo supermarket."])).todense()))
+# print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["We went to Mauritius and Dubai to celebrate our 10th Wedding Anniversary and stayed at Port Chambly when we were in Mauritius. We had done a swap through Interval International and had been allocated a 1 bedroom appartment| but when we checked in we were given a 3 bedroom which was nice| and we were able to check in 4 1/2 hours which was excellent. The apartment was excellently laid out and furnished and the main bed was very big and comfy. There was free WiFi in the bar area| and we were presented with a complimentary cocktail on arrival| which was a nice touch.That was the really very good bits. On the negative side the resort is extremely isolated and quite dificult to find from the main motorway from the airport for the first time. We like to be able to walk to local restaurants from where we are staying and this was absolutely impossible here. You needed a car to get anywhere though there was a bus stop outside the main entrance we didn't try public transport. The onsite restaurant and bar was very expensive compared to the restaurants we travelled out to| and the staff were not veery knowledgeable on tours available to be booked. There was only 1 English channel on the satellite receiver and that was BBC World News.With a car we found the resort well situated to tour the island once we'd worked out the back roads and short cuts| and didn'tr find too many problems getting into Port Louis by road| despite some previous comments on Trip Advisor| though it was busy during the rush hour but this would apply to any hotel / resort in the Port Louis area unless you were staying at Caudan Waterfront.If you do come to Port Chambly and want to stock up the kitchen we'd recommend going a few miles to the South African supermarkets (Pick'n'Pay| Intermart & Food Lovers Paradise) at Grand Baie rather than the nearby Jumbo supermarket."])).todense()))
+#
+# print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Excellet place to stay withc decent rooms view and facilities.The rooms are neat and evrything just gr8.the only prob was the breakfast.. Not to great and very limited stuff. There are number of activities which one can enjoy boat ride| kayak| canoying etc.. the place is just beautiful.Not a beach hotel| but good location both for busniess and leisure.Its value for money."])).todense()))
+# print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Excellet place to stay withc decent rooms view and facilities.The rooms are neat and evrything just gr8.the only prob was the breakfast.. Not to great and very limited stuff. There are number of activities which one can enjoy boat ride| kayak| canoying etc.. the place is just beautiful.Not a beach hotel| but good location both for busniess and leisure.Its value for money."])).todense()))
+#
+# print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Amazing location with a high sense of safety in the place. Nice view from the villa and very quiet place with nice live band music. We went down till the mouth of the river and it was very calm and peaceful. "])).todense()))
+# print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Amazing location with a high sense of safety in the place. Nice view from the villa and very quiet place with nice live band music. We went down till the mouth of the river and it was very calm and peaceful. "])).todense()))
+#
+# print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["run down| terrible customer service| cockroaches in restaurant| not enough cups| glasses etc at meal times| have stayed at 3* hotels which have been better then this. breakfast ample| other meal times poor. All inclusive absolute joke| cocktail was slush puppy machine 1 was non alcoholic & the other with alcohol| can honestly say 1 of the worst hotels have ever stayed in"])).todense()))
+# print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["run down| terrible customer service| cockroaches in restaurant| not enough cups| glasses etc at meal times| have stayed at 3* hotels which have been better then this. breakfast ample| other meal times poor. All inclusive absolute joke| cocktail was slush puppy machine 1 was non alcoholic & the other with alcohol| can honestly say 1 of the worst hotels have ever stayed in"])).todense()))
 
 #print(mn.predict(tfidf_transformer.transform(vectorizer.transform([""])).todense()))
