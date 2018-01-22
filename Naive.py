@@ -78,15 +78,20 @@ print(X_train.shape)
 print(y_train.shape)
 
 
-count = CountVectorizer(stop_words='english', tokenizer=None, ngram_range=(1, 2))
+count = CountVectorizer(stop_words='english', tokenizer=None, ngram_range=(1, 2), min_df=1, max_df=0.9)
 temp = count.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
 
 print(count.get_feature_names())
 
+print("Stop Words:")
+print(count.get_stop_words())
+print(temp.shape)
 #print("temp: " + temp)
 
-tdif = TfidfTransformer(norm='l2')
+tdif = TfidfTransformer(norm='l1')
 temp2 = tdif.fit_transform(temp) # Give words different Weights
+
+#print(temp2)
 
 # nb = GaussianNB()
 mn = MultinomialNB()
@@ -102,8 +107,26 @@ prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype
 
 predicted = mn.predict(prediction_data)
 
-# for c, d in zip(predicted, y_test):
-#     print(c, d)
+pos=0
+neg=0
+net=0
+wrong =0
+
+for c, d in zip(predicted, y_test):
+    print(c, d)
+    if ((c > 3) & (d > 3)):
+        pos = pos+1
+    elif ((c < 3) & (d < 3)):
+        neg = neg+1
+    elif ((c == 3) & (d == 3)):
+        net = net+1
+    else:
+        wrong = wrong +1
+
+    print("Accuracy for polarity is: " + str(((pos/600)+(neg/600)+(net/300))/3))
+    print("Wrong classification: " + str(wrong))
+
+
 print(np.mean(predicted == y_test))
 
 # print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
