@@ -21,8 +21,8 @@ from sklearn.metrics import accuracy_score
 filename = 'Trou aux Biches Beachcomber Golf Resort & Spa.csv'
 filename1 = 'Clean_1.csv'
 
-train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\correct_equal_combined_pos_neg.csv'
-test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\test_correct_300_each_pos_neg.csv'
+train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\correct_equal_combined_pos_neg_no_3.csv'
+test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\test_correct_300_each_pos_neg_no_3.csv'
 
 #names =['CT','CS','C','D','M','R']
 
@@ -68,7 +68,7 @@ print("hotel_dup summary for all attributes(): \n")
 print(hotel_dup.describe(include='all'))
 
 X_train = hotel
-y_train = hotel.Rating
+y_train = hotel.Polarity
 
 X_test = hotel_test
 y_test = hotel_test.Rating
@@ -104,7 +104,14 @@ mn = MultinomialNB()
 # nb.fit(X, hotel['Rating'])
 
 #mn.fit(temp2, hotel['Rating'])
-mn.fit(temp2, hotel['Polarity'])
+
+from sklearn import preprocessing
+
+le = preprocessing.LabelEncoder()
+le.fit(["Positive", "Negative"])
+
+y = le.transform(y_train)
+mn.fit(temp2, y)
 
 
 prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype('str')))
@@ -131,7 +138,7 @@ wrong =0
 #     print("Wrong classification: " + str(wrong))
 
 
-print(np.mean(predicted == y_test))
+print(np.mean(predicted == le.transform(y_test)))
 
 # print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
 # print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))

@@ -23,26 +23,37 @@
 # # #Replacing null with highest common
 # # hotel = hotel.fillna({"xxx": "xxhighestxx"})
 #
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.linear_model import LogisticRegression
 
-from sklearn.naive_bayes import GaussianNB, MultinomialNB
+# from sklearn.feature_extraction.text import CountVectorizer
+# from sklearn.linear_model import LogisticRegression
+#
+# from sklearn.naive_bayes import GaussianNB, MultinomialNB
+#
+# from sklearn.feature_extraction.text import TfidfTransformer
+#
+#
+# count = CountVectorizer(stop_words=None, tokenizer=None, ngram_range=(1, 1))
+# temp = count.fit_transform(["Very disappointing and bad, didn't expect such  crap crap crap service", "The hotel was beautiful but the food was very bad"])  # word count for recurrent words
+#
+#
+# print(count.get_feature_names())
+#
+# print("Stop Words:")
+# print(count.get_stop_words())
+# print(temp.shape)
+#
+# tdif = TfidfTransformer(norm='l1')
+# temp2 = tdif.fit_transform(temp) # Give words different Weights
+#
+# print(temp2)
 
-from sklearn.feature_extraction.text import TfidfTransformer
 
+from sklearn import preprocessing
 
-count = CountVectorizer(stop_words=None, tokenizer=None, ngram_range=(1, 1))
-temp = count.fit_transform(["Very disappointing and bad, didn't expect such  crap crap crap service", "The hotel was beautiful but the food was very bad"])  # word count for recurrent words
+le = preprocessing.LabelEncoder()
 
+le.fit(["Positive", "Negative"])
 
+print(le.classes_)
 
-print(count.get_feature_names())
-
-print("Stop Words:")
-print(count.get_stop_words())
-print(temp.shape)
-
-tdif = TfidfTransformer(norm='l1')
-temp2 = tdif.fit_transform(temp) # Give words different Weights
-
-print(temp2)
+print(le.transform(["Positive","Negative","Negative","Negative"]))

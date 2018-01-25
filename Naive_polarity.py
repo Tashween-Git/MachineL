@@ -21,8 +21,8 @@ from sklearn.metrics import accuracy_score
 filename = 'Trou aux Biches Beachcomber Golf Resort & Spa.csv'
 filename1 = 'Clean_1.csv'
 
-train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\correct_equal_combined_pos_neg.csv'
-test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\test_correct_300_each_pos_neg.csv'
+train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\correct_equal_combined_pos_neg_no_3.csv'
+test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\test_correct_300_each_pos_neg_no_3.csv'
 
 #names =['CT','CS','C','D','M','R']
 
@@ -68,7 +68,7 @@ print("hotel_dup summary for all attributes(): \n")
 print(hotel_dup.describe(include='all'))
 
 X_train = hotel
-y_train = hotel.Rating
+y_train = hotel.Polarity
 
 X_test = hotel_test
 y_test = hotel_test.Rating
@@ -104,7 +104,7 @@ mn = MultinomialNB()
 # nb.fit(X, hotel['Rating'])
 
 #mn.fit(temp2, hotel['Rating'])
-mn.fit(temp2, hotel['Polarity'])
+mn.fit(temp2, y_train)
 
 
 prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype('str')))
