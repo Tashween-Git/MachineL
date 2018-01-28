@@ -11,6 +11,7 @@ from sklearn.naive_bayes import GaussianNB, MultinomialNB
 
 from sklearn.feature_extraction.text import TfidfTransformer
 
+from sklearn import metrics
 # For preprocessing the data
 from sklearn.preprocessing import Imputer
 from sklearn import preprocessing
@@ -21,8 +22,8 @@ from sklearn.metrics import accuracy_score
 filename = 'Trou aux Biches Beachcomber Golf Resort & Spa.csv'
 filename1 = 'Clean_1.csv'
 
-train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\correct_equal_combined_pos_neg.csv'
-test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\test_correct_300_each_pos_neg.csv'
+train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\correct_equal_combined.csv'
+test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\test_correct_300_each.csv'
 
 #names =['CT','CS','C','D','M','R']
 
@@ -73,28 +74,35 @@ y_train = hotel.Rating
 X_test = hotel_test
 y_test = hotel_test.Rating
 
-y_test = hotel_test.Polarity
-
 
 print(hotel.shape)
 print(X_train.shape)
 print(y_train.shape)
 
 
-count = CountVectorizer(stop_words='english', tokenizer=None, ngram_range=(1, 2), min_df=1, max_df=0.9)
+count = CountVectorizer(stop_words='english', tokenizer=None, ngram_range=(1, 2), min_df=0.0039, max_df=0.8)
+
 temp = count.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
 
+print("Features:")
+
 print(count.get_feature_names())
+print(len(count.get_feature_names()))
 
 print("Stop Words:")
 print(count.get_stop_words())
+print(len(count.get_stop_words()))
+
+
 print(temp.shape)
+
 #print("temp: " + temp)
 
-tdif = TfidfTransformer(norm='l1')
-temp2 = tdif.fit_transform(temp) # Give words different Weights
+tdif = TfidfTransformer(norm='l1', smooth_idf=False)
+temp2 = tdif.fit_transform(temp)  # Give words different Weights
 
-#print(temp2)
+
+print(temp2.shape)
 
 # nb = GaussianNB()
 mn = MultinomialNB()
@@ -104,7 +112,7 @@ mn = MultinomialNB()
 # nb.fit(X, hotel['Rating'])
 
 #mn.fit(temp2, hotel['Rating'])
-mn.fit(temp2, hotel['Polarity'])
+mn.fit(temp2, y_train)
 
 
 prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype('str')))
@@ -132,7 +140,58 @@ wrong =0
 
 
 print(np.mean(predicted == y_test))
+print(metrics.accuracy_score(y_test, predicted))
 
+            # Start of new Vectorizer
+            #########################
+def bigram_vectorizer():
+    bigram = CountVectorizer(stop_words='english', token_pattern=r'\b\w+\b', ngram_range=(1, 2), min_df=0.0039, max_df=0.8)
+    temp_bigram = bigram.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
+
+    tdif_bigram = TfidfTransformer(norm='l1', smooth_idf=False)
+    temp2_bigram = tdif_bigram.fit_transform(temp_bigram)  # Give words different Weights
+
+
+    mn.fit(temp2_bigram, y_train)
+    prediction_data_bigram = tdif_bigram.transform(bigram.transform(X_test['Comment'].values.astype('str')))
+
+    predicted_bigram = mn.predict(prediction_data_bigram)
+
+    print(np.mean(predicted_bigram == y_test))
+    print(metrics.accuracy_score(y_test, predicted_bigram))
+
+
+def custom_tokenizer():
+    from nltk import word_tokenize
+    from nltk.stem import WordNetLemmatizer
+    import nltk
+    #nltk.download('wordnet')
+
+    class LemmaTokenizer(object):
+        def __init__(self):
+            self.wnl = WordNetLemmatizer()
+
+        def __call__(self, doc):
+            return [self.wnl.lemmatize(t) for t in word_tokenize(doc)]
+
+    vect = CountVectorizer(tokenizer=LemmaTokenizer(), ngram_range=(1, 2), stop_words='english', min_df=10, max_df=0.8)
+    temp_bigram = vect.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
+
+    print(temp.shape)
+    tdif_bigram = TfidfTransformer(norm='l1', smooth_idf=False)
+    temp2_bigram = tdif_bigram.fit_transform(temp_bigram)  # Give words different Weights
+
+
+    mn.fit(temp2_bigram, y_train)
+    prediction_data_bigram = tdif_bigram.transform(vect.transform(X_test['Comment'].values.astype('str')))
+
+    predicted_bigram = mn.predict(prediction_data_bigram)
+
+    print(np.mean(predicted_bigram == y_test))
+    print(metrics.accuracy_score(y_test, predicted_bigram))
+
+bigram_vectorizer()
+custom_tokenizer()
 # print(nb.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
 # print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["Very disappointing and bad, didn't expect such crap service"])).todense()))
 #

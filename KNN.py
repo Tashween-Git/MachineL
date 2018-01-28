@@ -57,7 +57,7 @@ print(X_train.shape)
 print(y_train.shape)
 
 
-count = CountVectorizer(stop_words='english', tokenizer=None, ngram_range=(1, 2))
+count = CountVectorizer(stop_words='english', tokenizer=None, ngram_range=(1, 2), min_df=50, max_df=0.9)
 temp = count.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
 
 print(count.get_feature_names())
@@ -82,6 +82,8 @@ predicted = model.predict(prediction_data)
 print(np.mean(predicted == y_test))
 
 print(accuracy_score(y_test,predicted))
+
+print("Printing how many was correct: ")
 print(accuracy_score(y_test,predicted, normalize=False))
 
 
