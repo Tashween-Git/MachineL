@@ -86,6 +86,22 @@ print(accuracy_score(y_test,predicted))
 print("Printing how many was correct: ")
 print(accuracy_score(y_test,predicted, normalize=False))
 
+print(list(predicted[:10]))
+
+print(y_test[:10])
+
+print(X_test.Comment[0])
+
+
+from sklearn.metrics import classification_report
+
+print("\n Classification report: \n")
+print(classification_report(y_test, predicted))
+
+from sklearn.metrics import confusion_matrix
+
+print("\n Confusion Matrix: \n")
+print(confusion_matrix(y_test, predicted))
 
 print("\n\n\n Printing for custom sentence: ")
 print(model.predict(tdif.transform(count.transform(["The hotel was beautiful but the food was not good"]))))
