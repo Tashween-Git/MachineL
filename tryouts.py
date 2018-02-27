@@ -48,12 +48,24 @@
 # print(temp2)
 
 
-from sklearn import preprocessing
+# from sklearn import preprocessing
+#
+# le = preprocessing.LabelEncoder()
+#
+# le.fit(["Positive", "Negative"])
+#
+# print(le.classes_)
+#
+# print(le.transform(["Positive","Negative","Negative","Negative"]))
 
-le = preprocessing.LabelEncoder()
 
-le.fit(["Positive", "Negative"])
+train_dataset_array=['correct_equal_combined.csv','correct_equal_combined_pos_neg.csv','correct_equal_combined_pos_neg_no_3.csv']
+test_dataset_array=['test_correct_300_each.csv','test_correct_300_each_pos_neg.csv','test_correct_300_each_pos_neg_no_3.csv']
 
-print(le.classes_)
 
-print(le.transform(["Positive","Negative","Negative","Negative"]))
+train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\' + train_dataset_array[0]
+test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\' + test_dataset_array[0]
+
+
+print(train_dataset)
+print(test_dataset)
