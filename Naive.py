@@ -151,6 +151,11 @@ for i in range(4):
     print(np.mean(predicted == y_test))
     print(metrics.accuracy_score(y_test, predicted))
 
+    from sklearn.metrics import classification_report
+
+    print("\n Classification report: \n")
+    print(classification_report(y_test, predicted))
+
     from sklearn.metrics import confusion_matrix
 
     print("\n Confusion Matrix: \n")

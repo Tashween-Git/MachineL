@@ -90,7 +90,7 @@ for i in range(4):
     print(y_train.shape)
 
 
-    count = CountVectorizer(stop_words='english', token_pattern=r'\b\w+\b', tokenizer=None, ngram_range=(1, 2), min_df=0.0039, max_df=0.8)
+    count = CountVectorizer()
 
     temp = count.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
 
@@ -108,7 +108,7 @@ for i in range(4):
 
     #print("temp: " + temp)
 
-    tdif = TfidfTransformer(norm='l1', smooth_idf=False)
+    tdif = TfidfTransformer()
     temp2 = tdif.fit_transform(temp)  # Give words different Weights
 
 
@@ -152,6 +152,11 @@ for i in range(4):
 
     print(np.mean(predicted == y_test))
     print(metrics.accuracy_score(y_test, predicted))
+
+    from sklearn.metrics import classification_report
+
+    print("\n Classification report: \n")
+    print(classification_report(y_test, predicted))
 
     from sklearn.metrics import confusion_matrix
 
