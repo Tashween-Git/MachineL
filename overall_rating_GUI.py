@@ -22,6 +22,7 @@ def foo():
     hotel = combo.get()
     hotel_fmt = hotel.replace(" ", "+") + "+"
     print(hotel_fmt)
+
     score_array = gs.google_scrape(hotel_fmt)
     print(len(score_array))
     print(score_array[0])
