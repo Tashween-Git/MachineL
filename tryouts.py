@@ -59,13 +59,39 @@
 # print(le.transform(["Positive","Negative","Negative","Negative"]))
 
 
-train_dataset_array=['correct_equal_combined.csv','correct_equal_combined_pos_neg.csv','correct_equal_combined_pos_neg_no_3.csv']
-test_dataset_array=['test_correct_300_each.csv','test_correct_300_each_pos_neg.csv','test_correct_300_each_pos_neg_no_3.csv']
+# train_dataset_array=['correct_equal_combined.csv','correct_equal_combined_pos_neg.csv','correct_equal_combined_pos_neg_no_3.csv']
+# test_dataset_array=['test_correct_300_each.csv','test_correct_300_each_pos_neg.csv','test_correct_300_each_pos_neg_no_3.csv']
+#
+#
+# train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\' + train_dataset_array[0]
+# test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\' + test_dataset_array[0]
+#
+#
+# print(train_dataset)
+# print(test_dataset)
+
+# import glob
+# import os
+#
+# csv = []
+# csv = (glob.glob("E:\PycharmProjects\TripAdvisorCrawl\*.csv"))
+#
+# for x in csv:
+#     print(os.path.basename(x).replace(".csv", ""))
+
+# import Naive
+#
+# Naive.predict("E:\PycharmProjects\MachineL\Hotels Dataset\\20 Degres Sud Hotel.csv")
+
+# import csv
+#
+filename = "E:\PycharmProjects\MachineL\Hotels Dataset\Anahita Golf & Spa Resort.csv"
+#
+# with open(filename, 'r') as csvfile:
+#     for row in csvfile:
+#         print(row)
+#         if(str(row) == "Comment Title, Comment"):
+#             print("baba")
 
 
-train_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\' + train_dataset_array[0]
-test_dataset = 'E:\PycharmProjects\MachineL\Correct_observation_combined\\' + test_dataset_array[0]
 
-
-print(train_dataset)
-print(test_dataset)

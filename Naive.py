@@ -28,6 +28,21 @@ test_dataset_array=['test_correct_300_each.csv', 'test_correct_300_each_pos_neg.
 set = 4
 
 
+def predict(hotel_file):
+    hotel_test = pd.read_csv(hotel_file, encoding='latin-1')
+
+    X_test = hotel_test
+    print(X_test['Comment'].head())
+
+    prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype('str')))
+
+    predicted = mn.predict(prediction_data)
+    total = 0
+    # for x in predicted:
+    #   print(x)
+
+    return predicted
+
 def naive(set):
 
     for i in range(set):
@@ -93,6 +108,7 @@ def naive(set):
         #print(X_train.shape)
         #print(y_train.shape)
 
+        global count
 
         count = CountVectorizer(stop_words='english', token_pattern=r'\b\w+\b', tokenizer=None, ngram_range=(1, 2), min_df=0.0039, max_df=0.8)
 
@@ -111,6 +127,7 @@ def naive(set):
         #print(temp.shape)
 
         #print("temp: " + temp)
+        global tdif
 
         tdif = TfidfTransformer(norm='l1', smooth_idf=False)
         temp2 = tdif.fit_transform(temp)  # Give words different Weights
@@ -119,6 +136,7 @@ def naive(set):
         #print(temp2.shape)
 
         # nb = GaussianNB()
+        global mn
         mn = MultinomialNB()
 
         # Must convert to dense matrix for GaussianNB
@@ -135,23 +153,7 @@ def naive(set):
 
         print(X_test['Comment'].head())
 
-        global predict
 
-        def predict(hotel_file):
-
-            hotel_test = pd.read_csv(hotel_file, encoding='latin-1')
-
-            X_test = hotel_test
-            print(X_test['Comment'].head())
-
-            prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype('str')))
-
-            predicted = mn.predict(prediction_data)
-            total = 0
-            #for x in predicted:
-            #   print(x)
-
-            return predicted
 
         #predict("E:\PycharmProjects\MachineL\Correct_observation_combined\Le Meridien Ile Maurice.csv")
         pos=0
@@ -190,6 +192,7 @@ def naive(set):
         #results()
 
         print("Starting for custom")
+        print(mn.predict(tdif.transform(count.transform(["Hilton Mauritius is a very good resort all together especially their facilities but some of the staff aren't the best and some times aren't very hospitable. The hotel also has hidden costs for dinner at their beach restaurant and doesn't say about the supplement charge."])).todense()))
         print(mn.predict(tdif.transform(count.transform(["Hilton Mauritius is a very good resort all together especially their facilities but some of the staff aren't the best and some times aren't very hospitable. The hotel also has hidden costs for dinner at their beach restaurant and doesn't say about the supplement charge."])).todense()))
 
                     # Start of new Vectorizer
