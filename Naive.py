@@ -29,6 +29,7 @@ set = 4
 
 
 def predict(hotel_file):
+    naive(1)
     hotel_test = pd.read_csv(hotel_file, encoding='latin-1')
 
     X_test = hotel_test

@@ -43,18 +43,22 @@ def google_scrape(hotel_search):
 
         rating = soup.find("div", {"class": "slp"})
 
+        rat_val = rating.text[10:13]
+        rat_val = rat_val.replace("-","")
+
         #print(rating.text)
         if x == 0 or x == 2:
             #print(rating.text[10:13])
-            total += (float(rating.text[10:13])/2)
-            score = float(rating.text[10:13])/2
+            x = rating.text[10:13]
+            total += (float(rat_val)/2)
+            score = float(rat_val)/2
             score_1 = ("%.1f" % score)
             print(score_1)
             score_array.append(score_1)
         elif x == 1:
             #print(rating.text[10:13])
-            total += float(rating.text[10:13])
-            score = float(rating.text[10:13])
+            total += float(rat_val)
+            score = float(rat_val)
             score_1 = ("%.1f" % score)
             print(score_1)
             score_array.append(score_1)

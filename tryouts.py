@@ -79,19 +79,18 @@
 # for x in csv:
 #     print(os.path.basename(x).replace(".csv", ""))
 
-# import Naive
-#
-# Naive.predict("E:\PycharmProjects\MachineL\Hotels Dataset\\20 Degres Sud Hotel.csv")
+import Naive
+pred = Naive.predict("E:\PycharmProjects\MachineL\Hotels Dataset\\20 Degres Sud Hotel.csv")
+
+for x in pred:
+    print(x)
 
 # import csv
 #
-filename = "E:\PycharmProjects\MachineL\Hotels Dataset\Anahita Golf & Spa Resort.csv"
+# filename = "E:\PycharmProjects\MachineL\Le Ravenal_test.csv"
 #
 # with open(filename, 'r') as csvfile:
 #     for row in csvfile:
 #         print(row)
 #         if(str(row) == "Comment Title, Comment"):
 #             print("baba")
-
-
-

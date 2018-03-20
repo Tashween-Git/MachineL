@@ -1,15 +1,15 @@
 from tkinter import *
-#import overall_rating as ov
-import google_scrap as gs
+import overall_rating as ov
 import tkinter.messagebox
 from tkinter import ttk
 
 import glob
 import os
+import time
 
 def get_filenames():
     csv = []
-    csv = (glob.glob("E:\PycharmProjects\TripAdvisorCrawl\*.csv"))
+    csv = (glob.glob("E:\PycharmProjects\MachineL\Hotels Dataset\*.csv"))
 
     csvs =[]
     for x in csv:
@@ -17,25 +17,53 @@ def get_filenames():
 
     return csvs
 
-def foo():
-    print(str(combo.get()))
-    hotel = combo.get()
-    hotel_fmt = hotel.replace(" ", "+") + "+"
-    print(hotel_fmt)
+def stop():
+    root.after(1000, pb.stop())
 
-    score_array = gs.google_scrape(hotel_fmt)
-    print(len(score_array))
-    print(score_array[0])
+def display(score_array, avg):
     booking.set(score_array[0])
     expedia.set(score_array[1])
     agoda.set(score_array[2])
     google.set(score_array[3])
-    #my_score_label = score_array[4]
+    my.set(avg)
+    total = 0
+
+    for x in score_array:
+        total += float(x)
+
+    total += float(avg)
+
+    overall = total/5
+
+    overall_score.set(overall)
+    stop()
+
+def foo():
+
+    print(str(combo.get()))
+    hotel = combo.get()
+    hotel_fmt = hotel.replace(" ", "+") + "+"
+    hotel_fmt = hotel_fmt.replace("&", "")
+
+    print(hotel_fmt)
+    import google_scrap as gs
+
+    score_array = gs.google_scrape(hotel_fmt)
+    print(len(score_array))
+    print(score_array[0])
+    pb.start(10)
+
+    hotel_name = "E:\PycharmProjects\MachineL\Hotels Dataset\\" + hotel + ".csv"
+    avg = ov.get_average(hotel_name)
+    avg = float(avg)
+    avg = ("%.1f" % avg)
+    display(score_array, avg)
+
 
 root = Tk()
 
 root.title("Overall Rating")
-root.geometry("640x640+0+0")
+root.geometry("640x450+0+0")
 
 tkinter.messagebox.showinfo("Welcome", "Welcome to the Machine Learning World")
 
@@ -70,21 +98,26 @@ agoda = StringVar()
 google = StringVar()
 my = StringVar()
 
+pb = ttk.Progressbar(root, length=640, mode='determinate')
+pb.place(x=0, y=200)
+
 booking_score_label = Label(root, textvariable=booking, font=("arial", 12), fg="black")
-booking_score_label.place(x=50, y=130)
+booking_score_label.place(x=70, y=130)
 expedia_score_label = Label(root, textvariable=expedia, font=("arial", 12), fg="black")
-expedia_score_label.place(x=200, y=130)
+expedia_score_label.place(x=220, y=130)
 agoda_score_label = Label(root, textvariable=agoda, font=("arial", 12), fg="black")
-agoda_score_label.place(x=300, y=130)
+agoda_score_label.place(x=320, y=130)
 google_score_label = Label(root, textvariable=google, font=("arial", 12), fg="black")
-google_score_label.place(x=400, y=130)
+google_score_label.place(x=420, y=130)
 my_score_label = Label(root, textvariable=my, font=("arial", 12), fg="black")
-my_score_label.place(x=500, y=130)
+my_score_label.place(x=520, y=130)
+
 
 get_value = Button(text="Get Rating", command=foo)
 get_value.place(x=300, y=400)
 
-overall_score = 4.5
-overall_score_label = Label(root, text=str(overall_score)).place(x=300,y=200)
+overall_score = StringVar()
+overall_score_label = Label(root, textvariable=overall_score, font=("arial", 20))
+overall_score_label.place(x=300,y=300)
 
 mainloop()
