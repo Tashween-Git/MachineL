@@ -33,7 +33,7 @@ def predict(hotel_file):
     hotel_test = pd.read_csv(hotel_file, encoding='latin-1')
 
     X_test = hotel_test
-    print(X_test['Comment'].head())
+    # print(X_test['Comment'].head())
 
     prediction_data = tdif.transform(count.transform(X_test['Comment'].values.astype('str')))
 
@@ -42,6 +42,13 @@ def predict(hotel_file):
     # for x in predicted:
     #   print(x)
 
+    return predicted
+
+def predict_text(review):
+
+    naive(1)
+    prediction_data = tdif.transform(count.transform([review])).todense()
+    predicted = mn.predict(prediction_data)
     return predicted
 
 def naive(set):
@@ -152,7 +159,7 @@ def naive(set):
 
         predicted = mn.predict(prediction_data)
 
-        print(X_test['Comment'].head())
+        # print(X_test['Comment'].head())
 
 
 
@@ -192,9 +199,9 @@ def naive(set):
 
         #results()
 
-        print("Starting for custom")
-        print(mn.predict(tdif.transform(count.transform(["Hilton Mauritius is a very good resort all together especially their facilities but some of the staff aren't the best and some times aren't very hospitable. The hotel also has hidden costs for dinner at their beach restaurant and doesn't say about the supplement charge."])).todense()))
-        print(mn.predict(tdif.transform(count.transform(["Hilton Mauritius is a very good resort all together especially their facilities but some of the staff aren't the best and some times aren't very hospitable. The hotel also has hidden costs for dinner at their beach restaurant and doesn't say about the supplement charge."])).todense()))
+        #print("Starting for custom")
+        #print(mn.predict(tdif.transform(count.transform(["Hilton Mauritius is a very good resort all together especially their facilities but some of the staff aren't the best and some times aren't very hospitable. The hotel also has hidden costs for dinner at their beach restaurant and doesn't say about the supplement charge."])).todense()))
+        #print(mn.predict(tdif.transform(count.transform(["Hilton Mauritius is a very good resort all together especially their facilities but some of the staff aren't the best and some times aren't very hospitable. The hotel also has hidden costs for dinner at their beach restaurant and doesn't say about the supplement charge."])).todense()))
 
                     # Start of new Vectorizer
                     #########################

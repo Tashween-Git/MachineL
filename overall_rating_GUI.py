@@ -20,21 +20,21 @@ def get_filenames():
 def stop():
     root.after(1000, pb.stop())
 
-def display(score_array, avg):
+def display(score_array, pred):
     booking.set(score_array[0])
     expedia.set(score_array[1])
     agoda.set(score_array[2])
     google.set(score_array[3])
-    my.set(avg)
+    my.set(pred)
     total = 0
 
     for x in score_array:
         total += float(x)
 
-    total += float(avg)
+    total += float(pred)
 
     overall = total/5
-
+    overall = ("%.1f" % overall)
     overall_score.set(overall)
     stop()
 
@@ -54,16 +54,16 @@ def foo():
     pb.start(10)
 
     hotel_name = "E:\PycharmProjects\MachineL\Hotels Dataset\\" + hotel + ".csv"
-    avg = ov.get_average(hotel_name)
-    avg = float(avg)
-    avg = ("%.1f" % avg)
-    display(score_array, avg)
+    pred = ov.get_average(hotel_name)
+    pred = float(pred)
+    pred = ("%.1f" % pred)
+    display(score_array, pred)
 
 
 root = Tk()
 
 root.title("Overall Rating")
-root.geometry("640x450+0+0")
+root.geometry("640x450+600+200")
 
 tkinter.messagebox.showinfo("Welcome", "Welcome to the Machine Learning World")
 
