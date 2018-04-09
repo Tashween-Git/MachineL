@@ -122,10 +122,10 @@ def naive(set):
 
         temp = count.fit_transform(X_train['Comment'].values.astype('str'))  # word count for recurrent words
 
-        # print("Features:")
+        #print("Features:")
         #
-        # print(count.get_feature_names())
-        # print(len(count.get_feature_names()))
+        #print(count.get_feature_names())
+        #print(len(count.get_feature_names()))
 
         #print("Stop Words:")
         #print(count.get_stop_words())
@@ -134,14 +134,14 @@ def naive(set):
 
         #print(temp.shape)
 
-        #print("temp: " + temp)
+        print("temp: " + str(temp.shape))
         global tdif
 
         tdif = TfidfTransformer(norm='l1', smooth_idf=False)
         temp2 = tdif.fit_transform(temp)  # Give words different Weights
 
 
-        #print(temp2.shape)
+        #print("tf-idf: " + str(temp2.shape))
 
         # nb = GaussianNB()
         global mn
@@ -197,7 +197,7 @@ def naive(set):
             print("\n Confusion Matrix: \n")
             print(confusion_matrix(y_test, predicted))
 
-        #results()
+        results()
 
         #print("Starting for custom")
         #print(mn.predict(tdif.transform(count.transform(["Hilton Mauritius is a very good resort all together especially their facilities but some of the staff aren't the best and some times aren't very hospitable. The hotel also has hidden costs for dinner at their beach restaurant and doesn't say about the supplement charge."])).todense()))
@@ -276,3 +276,5 @@ def naive(set):
     # print(mn.predict(tfidf_transformer.transform(vectorizer.transform(["run down| terrible customer service| cockroaches in restaurant| not enough cups| glasses etc at meal times| have stayed at 3* hotels which have been better then this. breakfast ample| other meal times poor. All inclusive absolute joke| cocktail was slush puppy machine 1 was non alcoholic & the other with alcohol| can honestly say 1 of the worst hotels have ever stayed in"])).todense()))
 
     #print(mn.predict(tfidf_transformer.transform(vectorizer.transform([""])).todense()))
+
+#naive(4)

@@ -12,9 +12,15 @@ out = filename.replace("test", "test_cleaned")
 output = open(out, 'w', newline='')
 writer = csv.writer(output)
 for row in csv.reader(input):
+    #print(row)
+
     # if row:
     #     writer.writerow(row)
     if any(field.strip() for field in row):
-        writer.writerow(row)
+        x = str(row)
+        if ", ''," in x:
+            print("null found")
+        else:
+          writer.writerow(row)
 input.close()
 output.close()

@@ -22,12 +22,12 @@ from urllib.request import Request, urlopen
 
 def google_scrape(hotel_search):
 
-    sites =["booking.com", "expedia", "agoda",""]
+    sites =["tripadvisor", "booking.com", "expedia", "agoda",""]
     total = 0
 
     score_array = []
 
-    for x in range(4):
+    for x in range(5):
         print(x)
         print(hotel_search)
 
@@ -52,14 +52,14 @@ def google_scrape(hotel_search):
         rat_val = rat_val.replace("-","")
 
         #print(rating.text)
-        if x == 0 or x == 2:
+        if x == 1 or x == 3:
             #print(rating.text[10:13])
             total += (float(rat_val)/2)
             score = float(rat_val)/2
             score_1 = ("%.1f" % score)
             print(score_1)
             score_array.append(score_1)
-        elif x == 1:
+        elif x ==0 or x == 2:
             #print(rating.text[10:13])
             total += float(rat_val)
             score = float(rat_val)

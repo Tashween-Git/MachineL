@@ -2,6 +2,7 @@ from tkinter import *
 import overall_rating as ov
 import tkinter.messagebox
 from tkinter import ttk
+from PIL import ImageTk, Image
 
 import glob
 import os
@@ -86,11 +87,34 @@ combo.current(1)
 # combo1['values'] = ('1', '2', '3')
 # combo1.current(1)
 
-booking_label = Label(root, text="Booking.com: ", font=("arial", 12), fg="black").place(x=50, y=100)
-expedia_label = Label(root, text="Expedia: ", font=("arial", 12), fg="black").place(x=200, y=100)
-agoda_label = Label(root, text="Agoda: ", font=("arial", 12), fg="black").place(x=300, y=100)
-google_label = Label(root, text="Google: ", font=("arial", 12), fg="black").place(x=400, y=100)
-my_label = Label(root, text="Predicted: ", font=("arial", 12), fg="black").place(x=500, y=100)
+labelframe = LabelFrame(root, text="Hotel Scores")
+labelframe.pack(fill="both", expand="yes")
+
+im1 = Image.open("C:\dissert\\tripadvisor_png.png")
+im1= im1.resize((90,60), Image.ANTIALIAS)
+img1 = ImageTk.PhotoImage(im1)
+
+booking_label = Label(labelframe, image= img1, text="Booking.com: ", font=("arial", 12), fg="black").pack(side = LEFT)
+
+im2 = Image.open("C:\dissert\\expedia_png.png")
+im2 = im2.resize((100,70), Image.ANTIALIAS)
+img2 = ImageTk.PhotoImage(im2)
+expedia_label = Label(labelframe, image= img2, text="Expedia: ", font=("arial", 12), fg="black").pack(side = LEFT)
+
+im3 = Image.open("C:\dissert\\agoda_png.png")
+im3 = im3.resize((90,30), Image.ANTIALIAS)
+img3 = ImageTk.PhotoImage(im3)
+agoda_label = Label(labelframe, image= img3, text="Agoda: ", font=("arial", 12), fg="black").pack(side = LEFT)
+
+im4 = Image.open("C:\dissert\\google_png.png")
+im4 = im4.resize((100,70), Image.ANTIALIAS)
+img4 = ImageTk.PhotoImage(im4)
+google_label = Label(labelframe, image= img4, text="Google: ", font=("arial", 12), fg="black").pack(side = LEFT)
+
+im5 = Image.open("C:\dissert\\booking_png.png")
+im5 = im5.resize((100,70), Image.ANTIALIAS)
+img5 = ImageTk.PhotoImage(im5)
+my_label = Label(labelframe, image= img5, text="Predicted: ", font=("arial", 12), fg="black").pack(side = LEFT)
 
 booking = StringVar()
 expedia = StringVar()

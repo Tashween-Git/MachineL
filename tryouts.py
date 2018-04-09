@@ -79,11 +79,25 @@
 # for x in csv:
 #     print(os.path.basename(x).replace(".csv", ""))
 
-import Naive
-pred = Naive.predict("E:\PycharmProjects\MachineL\Hotels Dataset\\20 Degres Sud Hotel.csv")
-
-for x in pred:
-    print(x)
+# import Naive
+# import logistic_regression
+# import SVM
+#
+# X = [Naive, logistic_regression, SVM]
+#
+# for clf in X:
+#     print(clf)
+#     pred = clf.predict("E:\PycharmProjects\MachineL\Hotels Dataset\Shangri-Las Le Touessrok Resort Mauritius.csv")
+#
+#     for x in pred:
+#         total = 0
+#         for x in pred:
+#             total = total + x
+#             # print(x)
+#
+#         average = total / pred.shape[0]
+#
+#     print("Average = " + str(average))
 
 # import csv
 #
@@ -94,3 +108,6 @@ for x in pred:
 #         print(row)
 #         if(str(row) == "Comment Title, Comment"):
 #             print("baba")
+
+for i in range(4):
+    print(i)
