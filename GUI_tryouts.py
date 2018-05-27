@@ -331,6 +331,8 @@ class PageOne(tk.Frame):
         get_value = Button(labelf_1, text="Get Rating", command=foo)
         get_value.grid(row=4, pady=10)
 
+        avg_score_label = Label(labelf_2, text="Average Score:", font=("arial", 25))
+        avg_score_label.grid(row=2, columnspan=5, sticky=N+E+W, pady=80)
         global overall_score
         overall_score = StringVar()
         overall_score_label = Label(labelf_2, textvariable=overall_score, font=("arial", 20))
