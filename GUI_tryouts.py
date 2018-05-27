@@ -309,6 +309,7 @@ class PageOne(tk.Frame):
         google = StringVar()
         my = StringVar()
 
+
         tripadvisor_score_label = Label(labelf_2, textvariable=tripadvisor, font=("arial", 12), fg="black",
                                         borderwidth=1, relief="solid")
         tripadvisor_score_label.grid(row=1, column=0, pady=10)
